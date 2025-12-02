@@ -1,59 +1,108 @@
-Sistema de control PID para estabilizar un péndulo invertido, con interfaz web para ajuste remoto de parámetros. El proyecto incluye:
+# 🤖 Péndulo Invertido — Control PID + Interfaz Web (ESP32)
 
-Control PID implementado en tiempo real
+Sistema de control **PID en tiempo real** para estabilizar un **péndulo invertido**, con **interfaz web** para ajustar parámetros remotamente. Incluye telemetría, calibración y medidas de seguridad para evitar daños por caídas.
 
-Interfaz web para ajuste de parámetros (Kp, Ki, Kd)
+---
 
-Calibración del ángulo cero
+## ✨ Características principales
 
-Protección contra caídas
+- ✅ Control **PID** implementado en tiempo real (**100 Hz**)
+- 🌐 Interfaz web para ajuste remoto de **Kp, Ki, Kd**, setpoint y offset
+- 🎯 **Calibración del ángulo cero**
+- 🛡️ Protección contra caídas (auto-desactivación)
+- 📡 **Telemetría** del estado del sistema
+- 🧯 Anti-windup del término integral (protección del PID)
 
-Telemetría del estado del sistema
+---
 
-Hardware
-Microcontrolador: ESP32
+## 🧩 Hardware
 
-Sensor inercial: MPU6050 (acelerómetro + giroscopio)
+- **Microcontrolador:** ESP32  
+- **Sensor inercial:** MPU6050 (acelerómetro + giroscopio)  
+- **Actuadores:** 2× motores DC con puente H  
 
-Actuadores: 2 motores DC con puente H
+### 🔌 Conexiones (GPIO)
 
-Conexiones:
+#### MPU6050 (I2C)
+| Señal | GPIO |
+|------:|:----:|
+| SDA   | 21   |
+| SCL   | 22   |
 
-MPU6050: SDA (GPIO21), SCL (GPIO22)
+#### Motores (Puente H)
+| Motor | Señal | GPIO |
+|------:|:-----:|:----:|
+| A     | PWMA  | 26   |
+| A     | AIN1  | 2    |
+| A     | AIN2  | 0    |
+| B     | PWMB  | 25   |
+| B     | BIN1  | 16   |
+| B     | BIN2  | 17   |
 
-Motores: PWMA (GPIO26), AIN1 (GPIO2), AIN2 (GPIO0), PWMB (GPIO25), BIN1 (GPIO16), BIN2 (GPIO17)
+---
 
-Configuración
-Conectarse al AP "RobotAP" (contraseña: 12345678)
+## ⚙️ Puesta en marcha (Web UI)
 
-Acceder a http://192.168.4.1
+1. Conéctate al WiFi **RobotAP**  
+   - **Contraseña:** `12345678`
+2. Abre en el navegador:  
+   - `http://192.168.4.1`
+3. **Calibra el ángulo cero** con el robot **vertical** antes de activar motores.
+4. Ajusta parámetros PID y activa el control.
+   ![WhatsApp Image 2025-12-02 at 19 46 14](https://github.com/user-attachments/assets/b4e0e8b0-0213-478d-b117-d779a0eff4ad)
 
-Calibrar el ángulo cero antes de activar los motores
 
-Parámetros ajustables
-Kp, Ki, Kd: Constantes del controlador PID
+---
 
-Setpoint: Ángulo de referencia (en grados)
+## 🎛️ Parámetros ajustables
 
-Ajuste fino: Offset adicional para calibración
+| Parámetro | Descripción |
+|----------:|-------------|
+| **Kp, Ki, Kd** | Constantes del controlador PID |
+| **Setpoint** | Ángulo objetivo (en grados) |
+| **Ajuste fino (Offset)** | Offset adicional para calibración fina |
 
-Características de seguridad
-Desactivación automática al detectar caída (>30° por más de 1s)
+---
 
-Anti-windup del término integral
+## 🛡️ Seguridad
 
-Frecuencia de control fija a 100Hz
+- 🧱 **Desactivación automática** si detecta caída: **> 30° durante más de 1 s**
+- 🧯 **Anti-windup** del integrador para evitar saturación
+- ⏱️ Frecuencia de control fija: **100 Hz**
 
-Estructura del código
-ControlTask: Tarea FreeRTOS para el control PID
+---
 
-WebServer: Interfaz para ajuste remoto
+## 🏗️ Arquitectura del software
 
-Complementary Filter: Fusión de datos del MPU6050
+- **ControlTask** → Tarea FreeRTOS que ejecuta el control PID a 100 Hz  
+- **WebServer** → Interfaz web para lectura/ajuste de parámetros y estado  
+- **Complementary Filter** → Fusión MPU6050 (acelerómetro + giroscopio) para estimar el ángulo  
 
-Uso
-Calibrar el sensor con el robot en posición vertical
+---
 
-Ajustar parámetros PID mediante la interfaz web
+## 🚀 Uso recomendado
 
-Activar los motores y monitorear el comportamiento
+1. Coloca el robot **en vertical** y realiza la **calibración**.
+2. Ajusta **Kp, Ki, Kd** desde la web (empieza con valores conservadores).
+3. Activa motores y **monitoriza la telemetría**.
+4. Afina setpoint/offset hasta lograr estabilidad.
+
+---
+
+## 📌 Notas
+
+- Si el sistema entra en modo protección, revisa:
+  - calibración del cero
+  - dirección de los motores
+  - saturación del control (Kp/Ki demasiado altos)
+  - vibraciones mecánicas/ruido del MPU6050
+
+---
+
+## 📷
+
+
+
+![WhatsApp Image 2025-12-02 at 19 46 15](https://github.com/user-attachments/assets/a7679310-da4c-473d-b857-04c6abeb0e5f)
+
+
