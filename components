@@ -1,0 +1,14 @@
+LISTA DE COMPONENTES 
+
+- 1x Microcontrolador: ESP32
+- 1x Sensor inercial: MPU6050 (acelerómetro + giroscopio)
+- 2x Motores DC
+- 1x Puente H TB6612FNG
+- 1x L7805CV
+- 1x Condensador ceramico 0,1 uF
+- 1x Condensador ceramico 0,33 uF
+- 1x Condensador electrolitico 100 uF
+- 1x Condensador electrolitico 0,22 uF
+- 3x Conector M+F XT30
+
+
